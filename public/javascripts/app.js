@@ -11,7 +11,7 @@ let map = new L.Map("map", {center: [37.8, -96.9], zoom: 2})
   .addLayer(new L.TileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"))
 
 searchBox.addEventListener('submit', (e) => {
-  
+
   e.preventDefault()
   map.eachLayer((layer) => {
     map.removeLayer(layer)

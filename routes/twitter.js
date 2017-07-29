@@ -21,9 +21,14 @@ router.get('/:term/:count', (req, res, next) => {
       .then(results => results.statuses)
       .catch(err => { console.log(err) })
 
-    const geoTweets = rawTweets.filter(tweet =>
-      tweet.coordinates != null
-    )
+    const geoTweets = rawTweets.filter(tweet => (tweet.coordinates != null) )
+      .map((tweet)=> {
+        return {
+          lat: tweet.coordinates.coordinates[0],
+          lng: tweet.coordinates.coordinates[1]
+        }
+    })
+
     const cityTweets = rawTweets.filter(tweet =>
       tweet.user.location != null
     )
