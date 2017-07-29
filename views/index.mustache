@@ -12,12 +12,25 @@
 
       <nav class="navbar">
         <div class="navbar-header">
-          <p>Tweetmap</p>
+          <span class="title">Tweetmap</span>
+          <a href="https://github.com/crashspringfield/tweetmap" target="_blank">
+            <img src="/images/git-icon.png" class="link-icon"/>
+          </a>
         </div>
-        <div class="nav navbar-nav navbar-right search-button">
+        <div class="nav navbar-nav navbar-right search-bar">
           <form id="search" method="get">
-              <input type="text" id="searchTerm" maxlength="120" />
-              <input type="submit" value="search" />
+            <input type="checkbox" id="showHeatmap" checked/>
+            <label for="showHeatmap" class="search-option">heatmap</label>
+            <input type="checkbox" id="showMarkers" checked/>
+            <label for="showMarkers" class="search-option">markers</label>
+            <input type="text" id="searchTerm" maxlength="120" />
+            <select id="numberOfTweets">
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+            <input type="submit" value="search" class="search-button"/>
           </form>
         </div>
       </nav>
@@ -27,6 +40,7 @@
     </div>
 
     <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+    <script src="http://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js"></script>
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="/javascripts/app.js"></script>
   </body>

@@ -10,25 +10,21 @@ const publicConfig = {
 
 module.exports = {
 
-  /*
-  Sends user's profile location to Google to get lat/lng
-  */
-  getLocation: function(city) {
-    return new Promise(function(resolve, reject) {
-      let gmAPI = new GoogleMapsAPI(publicConfig)
-      let geocodeParams = {
+  getLocation: (city) => {
+    return new Promise((resolve, reject) => {
+      const gmAPI = new GoogleMapsAPI(publicConfig)
+      const geocodeParams = {
         address: city,
         language: 'en'
       }
 
-      gmAPI.geocode(geocodeParams, function(err, response) {
+      gmAPI.geocode(geocodeParams, (err, response) => {
         if (err) {
           reject(err)
         }
-        let place = response.results
-        // verify we actually got a valid lat/lng back
-        if(place[0]) {
-          let latLng = place[0].geometry.location
+
+        if (response.results[0]) {
+          const latLng = response.results[0].geometry.location
           resolve(latLng)
         }
         resolve(null)

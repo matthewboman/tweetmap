@@ -7,13 +7,19 @@ body {
 a {
   color: #00B7FF;
 }
-
-p {
-  padding-top: 5px;
+.navbar-header {
+  padding-top: 7px;
+  padding-left: 2px;
 }
 
 .body {
   margin-top: -2em;
+}
+
+.link-icon {
+  display: inline-block;
+  height: 20px;
+  margin-left: 5px;
 }
 
 .map {
@@ -24,6 +30,23 @@ p {
   border-radius: 4px;
 }
 
-.search-button {
+.search-bar {
   margin-right: 1.2em;
+  padding-top: 3px;
+}
+
+.search-option {
+  font-weight: normal;
+}
+
+.search-button {
+  border-radius: 15px;
+  border: none;
+  outline: none;
+  line-height: 1.5;
+}
+.search-button:focus {
+  -webkit-box-shadow: inset 0px 0px 10px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: inset 0px 0px 10px 0px rgba(0,0,0,0.75);
+  box-shadow: inset 0px 0px 10px 0px rgba(0,0,0,0.75);
 }

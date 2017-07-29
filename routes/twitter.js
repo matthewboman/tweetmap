@@ -1,69 +1,49 @@
-const express = require('express');
-const router = express.Router();
-const Twitter = require('twitter');
-const Promise = require('bluebird');
+const express = require('express')
+const router = express.Router()
+const Twitter = require('twitter')
+const Promise = require('bluebird')
 
 const Request = require('../utils/Request')
 const Geo = require('../utils/Geo')
 
-router.get('/:term', function(req, res, next) {
-  let searchTerm = req.params.term
-  let endpoint = 'search/tweets';
-  let  params = {
-      q: searchTerm,
-      count: 100,
+router.get('/:term/:count', (req, res, next) => {
+  const endpoint = 'search/tweets'
+  const params = {
+      q: req.params.term,
+      count: req.params.count,
       result_type: 'recent'
     }
 
-  let geoTweets = [];
-  let cityTweets = [];
+  function TweetHandler () {}
 
-  Request.getTweets(endpoint, params)
-    .then(function(results) {
-      let tweets = results.statuses;
-      // console.log(tweets)
-      for (let i = 0; i < tweets.length; i++) {
-        if (tweets[i].coordinates != null) {
-          geoTweets.push(tweets[i].coordinates.coordinates)
-        } else if (tweets[i].user.location) {
-          cityTweets.push(tweets[i].user.location)
-        } else {
-          // console.log('User hasn't enabled location')
-        }
-      }
-    })
-    // .then(function() {
-    //   console.log('geo shit is ' + geoTweets);
-    //   console.log('city shit is ' + cityTweets);
-    // })
-    .then(function() {
-      let counter = 0
-      for (let i = 0; i < cityTweets.length; i++) {
-        Geo.getLocation(cityTweets[i])
-          .then(function(latLng) {
-            counter += 1
-            if (latLng != null) {
-              geoTweets.push(latLng)
-            }
-            // if all tweets with city have been processed, send response
-            if (counter == cityTweets.length - 1) {
-              res.json({
-                success: 'true',
-                tweetLocations: geoTweets
-              })
-            }
-          })
-          .catch(function(err) {
-            // do nothing because lots of TypeErrors will happen with bullshit locations
-          })
-      }
-    })
-    .catch(function(err) {
-      console.log(err)
-    })
+  TweetHandler.prototype.getCoordinates = Promise.coroutine(function* () {
+    const rawTweets = yield Request.getTweets(endpoint, params)
+      .then(results => results.statuses)
+      .catch(err => { console.log(err) })
 
-  return;
+    const geoTweets = rawTweets.filter(tweet =>
+      tweet.coordinates != null
+    )
+    const cityTweets = rawTweets.filter(tweet =>
+      tweet.user.location != null
+    )
+
+    const newGeoTweets = yield Promise.map(cityTweets, (tweet) => {
+      return Geo.getLocation(tweet.user.location)
+        .catch((err) => {})
+    }).filter(latLng => latLng != null)
+
+    const allGeoTweets = geoTweets.concat(newGeoTweets)
+
+    res.json({
+      success: 'true',
+      tweetLocations: allGeoTweets
+    })
+  })
+
+  const tweetMapper = new TweetHandler()
+  tweetMapper.getCoordinates(endpoint, params)
 
 })
 
-module.exports = router;
+module.exports = router
