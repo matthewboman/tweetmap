@@ -10,6 +10,7 @@ const routes = require('./routes/index')
 const twitter = require('./routes/twitter')
 
 const app = express()
+app.set('port', (process.env.PORT || 3000))
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'mustache')
 app.engine('mustache', require('hogan-middleware').__express)
@@ -39,6 +40,10 @@ app.use((err, req, res, next) => {
     message: err.message,
     error: {}
   })
+})
+
+app.listen(app.get('port'), () => {
+  console.log('Node app is running on port', app.get('port'));
 })
 
 module.exports = app
