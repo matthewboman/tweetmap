@@ -1,44 +1,31 @@
+/* general */
 body {
-  padding: 50px;
+  padding: 15px 50px 50px 50px;
   font: 18px "Lucida Grande", Helvetica, Arial, sans-serif;
   background-color: #f3f3f3;
 }
-
 a {
   color: #00B7FF;
 }
+
+/* navbar */
 .navbar-header {
   padding-top: 7px;
   padding-left: 2px;
 }
-
-.body {
-  margin-top: -2em;
-}
-
 .link-icon {
   display: inline-block;
   height: 20px;
   margin-left: 5px;
 }
 
-.map {
-  width: 90vw;
-  height: 85vh;
-  margin-top: -2em;
-  border: 4px solid #fff;
-  border-radius: 4px;
-}
-
 .search-bar {
   margin-right: 1.2em;
   padding-top: 3px;
 }
-
 .search-option {
   font-weight: normal;
 }
-
 .search-button {
   border-radius: 15px;
   border: none;
@@ -49,4 +36,30 @@ a {
   -webkit-box-shadow: inset 0px 0px 10px 0px rgba(0,0,0,0.75);
   -moz-box-shadow: inset 0px 0px 10px 0px rgba(0,0,0,0.75);
   box-shadow: inset 0px 0px 10px 0px rgba(0,0,0,0.75);
+}
+
+/* map */
+.map {
+  width: 90vw;
+  height: 85vh;
+  margin-top: -2em;
+  border: 4px solid #fff;
+  border-radius: 4px;
+}
+
+.info-window {
+  font: 12px "Lucida Grande", Helvetica, Arial, sans-serif;
+  overflow: hidden;
+}
+.tweet {
+
+}
+.twitter-user {
+  float: right;
+}
+.twitter-user-img {
+  height: 50px;
+  width: 50px;
+  border-radius: 25px;
+  margin-left: 10px;
 }

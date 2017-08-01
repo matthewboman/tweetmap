@@ -7,9 +7,7 @@ Tweetmap displays the location of recent tweets containing any given search term
 ## Contributing
 
 Tweetmap is a work in progress. Some features I'm hoping to develop include:
-
     - managing state to show/hide the heatmap and/or markers
-    - returning tweets as objects (for linking to profile and displaying tweet)  
 
 ## Running locally
 

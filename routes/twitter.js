@@ -1,18 +1,20 @@
 const express = require('express')
 const router = express.Router()
-const Twitter = require('twitter')
 const Promise = require('bluebird')
 
 const Request = require('../utils/Request')
 const Geo = require('../utils/Geo')
 
+const zip = (arr, ...arrs) =>
+  arr.map((val, i) => arrs.reduce((a, arr) => [...a, arr[i]], [val]))
+
 router.get('/:term/:count', (req, res, next) => {
   const endpoint = 'search/tweets'
   const params = {
-      q: req.params.term,
-      count: req.params.count,
-      result_type: 'recent'
-    }
+    q: req.params.term,
+    count: req.params.count,
+    result_type: 'recent'
+  }
 
   function TweetHandler () {}
 
@@ -23,22 +25,26 @@ router.get('/:term/:count', (req, res, next) => {
 
     const geoTweets = rawTweets.filter(tweet => (tweet.coordinates != null) )
       .map((tweet)=> {
-        return {
-          lat: tweet.coordinates.coordinates[0],
-          lng: tweet.coordinates.coordinates[1]
-        }
+        return [
+          tweet,
+          { lat: tweet.coordinates.coordinates[0],
+            lng: tweet.coordinates.coordinates[1] }
+        ]
     })
 
     const cityTweets = rawTweets.filter(tweet =>
       tweet.user.location != null
     )
 
-    const newGeoTweets = yield Promise.map(cityTweets, (tweet) => {
-      return Geo.getLocation(tweet.user.location)
-        .catch((err) => {})
-    }).filter(latLng => latLng != null)
+    const newGeoTweets = yield Promise.map(cityTweets, (tweet) =>
+      Geo.getLocation(tweet.user.location)
+         .catch((err) => {})
+    )
 
-    const allGeoTweets = geoTweets.concat(newGeoTweets)
+    const tweetsWithGeo = zip(cityTweets, newGeoTweets)
+      .filter(pair => pair[1] != undefined)
+
+    const allGeoTweets = geoTweets.concat(tweetsWithGeo)
 
     res.json({
       success: 'true',
